@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">2017.05.17_StackParser</string>
+
+    <!--  Menu items -->
+    <string name="settings">Настройки</string>
+    <string name="refresh">Обновить</string>
+    <string name="page_title">Свежие новости на StackOverflow по тэгу \'android\'</string>
+    <string name="updated">Последние обновления:</string>
+    <string name="lost_connection">Соединение прервано.</string>
+    <string name="wifi_connected">Wi-Fi переподключен.</string>
+    <string name="connection_error">Невозможно прогрузить контент. Проверьте соединение</string>
+    <string name="xml_error">Ошибка парсинга XML.</string>
+
+</resources>

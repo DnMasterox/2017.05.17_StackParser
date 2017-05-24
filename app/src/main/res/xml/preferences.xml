@@ -1,0 +1,15 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:title="Выбор загрузки"
+        android:summary="Сетевое соединение необходимо для выбора параметров загрузки"
+        android:key="listPref"
+        android:defaultValue="Wi-Fi"
+        android:entries="@array/listArray"
+        android:entryValues="@array/listValues"
+        />
+    <CheckBoxPreference
+        android:title="Предпросмотр"
+        android:defaultValue="false"
+        android:summary="Показывать предпросмотр для каждой ссылки."
+        android:key="summaryPref" />
+</PreferenceScreen>
