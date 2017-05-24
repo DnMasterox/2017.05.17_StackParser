@@ -10,9 +10,6 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
-/**
- * Created by nshumakov on 22.05.2017.
- */
 
 public class ProgressTask extends AsyncTask<String, Void, String> {
     @Override
