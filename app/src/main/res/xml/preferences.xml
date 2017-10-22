@@ -11,5 +11,6 @@
         android:title="Предпросмотр"
         android:defaultValue="false"
         android:summary="Показывать предпросмотр для каждой ссылки."
-        android:key="summaryPref" />
+        android:key="summaryPref"
+        android:background="@color/colorPrimaryDark"/>
 </PreferenceScreen>

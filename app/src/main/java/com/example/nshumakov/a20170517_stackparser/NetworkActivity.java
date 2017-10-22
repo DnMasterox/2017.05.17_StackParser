@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.style.BackgroundColorSpan;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,22 +30,27 @@ import java.util.Calendar;
 import java.util.List;
 
 public class NetworkActivity extends Activity {
+    public Context getContext() {
+        return context;
+    }
+
+    private Context context = this;
     public static final String WIFI = "Wi-Fi";
     public static final String ANY = "Any";
     private static final String URL =
             "https://ru.stackoverflow.com/feeds/tag?tagnames=android&sort=newest";
 
-   /*  Whether there is a Wi-Fi connection.*/
+    /*  Whether there is a Wi-Fi connection.*/
     private static boolean wifiConnected = false;
-   /*  Whether there is a mobile connection.*/
+    /*  Whether there is a mobile connection.*/
     private static boolean mobileConnected = false;
-   /*  Whether the display should be refreshed.*/
+    /*  Whether the display should be refreshed.*/
     public static boolean refreshDisplay = true;
 
-  /*   The user's current network preference setting.*/
+    /*   The user's current network preference setting.*/
     public static String sPref = null;
 
-  /*   The BroadcastReceiver that tracks network connectivity changes.*/
+    /*   The BroadcastReceiver that tracks network connectivity changes.*/
     private NetworkReceiver receiver = new NetworkReceiver();
 
     @Override
@@ -56,8 +63,8 @@ public class NetworkActivity extends Activity {
         this.registerReceiver(receiver, filter);
     }
 
-   /*  Refreshes the display if the network connection and the
-     pref settings allow it.*/
+    /*  Refreshes the display if the network connection and the
+      pref settings allow it.*/
     @Override
     public void onStart() {
         super.onStart();
@@ -89,8 +96,8 @@ public class NetworkActivity extends Activity {
         }
     }
 
-   /*  Checks the network connection and sets the wifiConnected and mobileConnected
-     variables accordingly.*/
+    /*  Checks the network connection and sets the wifiConnected and mobileConnected
+      variables accordingly.*/
     private void updateConnectedFlags() {
         ConnectivityManager connMgr =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -105,10 +112,10 @@ public class NetworkActivity extends Activity {
         }
     }
 
-  /*   Uses AsyncTask subclass to download the XML feed from stackoverflow.com.
-     This avoids UI lock up. To prevent network operations from
-     causing a delay that results in a poor user experience, always perform
-     network operations on a separate thread from the UI.*/
+    /*   Uses AsyncTask subclass to download the XML feed from stackoverflow.com.
+       This avoids UI lock up. To prevent network operations from
+       causing a delay that results in a poor user experience, always perform
+       network operations on a separate thread from the UI.*/
     private void loadPage() {
         if (((sPref.equals(ANY)) && (wifiConnected || mobileConnected))
                 || ((sPref.equals(WIFI)) && (wifiConnected))) {
@@ -119,7 +126,7 @@ public class NetworkActivity extends Activity {
         }
     }
 
-   /*  Displays an error if the app is unable to load content.*/
+    /*  Displays an error if the app is unable to load content.*/
     private void showErrorPage() {
         setContentView(R.layout.activity_main);
 
@@ -129,7 +136,7 @@ public class NetworkActivity extends Activity {
                 "text/html", null);
     }
 
-   /*  Populates the activity's options menu.*/
+    /*  Populates the activity's options menu.*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -137,13 +144,17 @@ public class NetworkActivity extends Activity {
         return true;
     }
 
-   /*  Handles the user's menu selection.*/
+    /*  Handles the user's menu selection.*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings:
-                Intent settingsActivity = new Intent(getBaseContext(), SettingsActivity.class);
-                startActivity(settingsActivity);
+               /* Intent settingsActivity = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(settingsActivity);*/
+                getFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, new SettingsFragment()).commit();
+                new BackgroundColorSpan(Color.BLACK);
+
                 return true;
             case R.id.refresh:
                 loadPage();
@@ -153,7 +164,7 @@ public class NetworkActivity extends Activity {
         }
     }
 
-   /*  Implementation of AsyncTask used to download XML feed from stackoverflow.com.*/
+    /*  Implementation of AsyncTask used to download XML feed from stackoverflow.com.*/
     private class DownloadXmlTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -181,8 +192,8 @@ public class NetworkActivity extends Activity {
         }
     }
 
-  /*   Uploads XML from stackoverflow.com, parses it, and combines it with
-     HTML markup. Returns HTML string.*/
+    /*   Uploads XML from stackoverflow.com, parses it, and combines it with
+       HTML markup. Returns HTML string.*/
     private String loadXmlFromNetwork(String urlString) throws XmlPullParserException, IOException {
         InputStream stream = null;
         StackOverflowXmlParser stackOverflowXmlParser = new StackOverflowXmlParser();
@@ -233,10 +244,10 @@ public class NetworkActivity extends Activity {
     }
 
 
-      /*This BroadcastReceiver intercepts the android.net.ConnectivityManager.CONNECTIVITY_ACTION,
-      which indicates a connection change. It checks whether the type is TYPE_WIFI.
-      If it is, it checks whether Wi-Fi is connected and sets the wifiConnected flag in the
-      main activity accordingly.*/
+    /*This BroadcastReceiver intercepts the android.net.ConnectivityManager.CONNECTIVITY_ACTION,
+    which indicates a connection change. It checks whether the type is TYPE_WIFI.
+    If it is, it checks whether Wi-Fi is connected and sets the wifiConnected flag in the
+    main activity accordingly.*/
     public class NetworkReceiver extends BroadcastReceiver {
 
         @Override
